@@ -11,12 +11,30 @@
         android:layout_height="fill_parent"
         android:background="@drawable/ggalgom_background">
 
+            <!--
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/window"
+            android:src="@drawable/minieon01"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/bathroom"
+            android:src=""
+            />
+            -->
+
+        <!--
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="50dp"
             android:text="i love you"
             ></TextView>
+            -->
 
     </LinearLayout>
 
