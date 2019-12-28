@@ -6,26 +6,39 @@
     android:layout_height="match_parent"
     tools:context=".GGALGOM_Activity">
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="@drawable/ggalgom_background">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/ggalgom_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-            <!--
+
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/window"
-            android:src="@drawable/minieon01"
-            />
+            android:layout_width="209dp"
+            android:layout_height="107dp"
+            android:layout_marginStart="76dp"
+            android:layout_marginLeft="76dp"
+            android:layout_marginTop="44dp"
+            android:src="@drawable/window_tilted"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/bathroom"
-            android:src=""
-            />
-            -->
+            android:layout_width="98dp"
+            android:layout_height="103dp"
+            android:layout_marginStart="120dp"
+            android:layout_marginLeft="120dp"
+            android:layout_marginTop="60dp"
+            android:src="@drawable/door_tilted"
+            app:layout_constraintStart_toEndOf="@+id/window"
+            app:layout_constraintTop_toTopOf="parent" />
+        -->
 
         <!--
         <TextView
@@ -36,6 +49,6 @@
             ></TextView>
             -->
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
