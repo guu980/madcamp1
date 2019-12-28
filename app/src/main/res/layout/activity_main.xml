@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content">
 
                 <LinearLayout
-                    android:id="@+id/content1"
+                    android:id="@+id/contacts"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -51,23 +51,13 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/content2"
+                    android:id="@+id/gallery"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-
-                    <TextView
-                        android:id="@+id/showing"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="#009688"
-                        android:gravity="center"
-                        android:padding="8dp"
-                        android:text="TAB CONTENT 2" />
-
                     <Gallery
-                        android:id="@+id/gallery"
+                        android:id="@+id/real_gallery"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:spacing="20dp"
@@ -77,18 +67,18 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/content3"
+                    android:id="@+id/ggalgom"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="match_parent"
+                    <Button
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="#2196F3"
                         android:gravity="center"
-                        android:padding="8dp"
-                        android:text="TAB CONTENT 3" />
+                        android:padding="8sp"
+                        android:text="To GGALGOM"
+                        android:id="@+id/BtnToNewAct"/>
 
                 </LinearLayout>
             </FrameLayout>

@@ -8,16 +8,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.TabHost;
-import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -82,9 +81,25 @@ public class MainActivity extends AppCompatActivity {
         tabHost1.setup();
 
         // 첫번째 탭
+        final int img[] = {R.drawable.minieon01, R.drawable.minieon02, R.drawable.minieon03,
+                R.drawable.minieon04, R.drawable.minieon05, R.drawable.minieon06,
+                R.drawable.minieon07, R.drawable.minieon08, R.drawable.minieon09, R.drawable.minieon10, R.drawable.minieon11,
+                R.drawable.minieon12, R.drawable.minieon13, R.drawable.minieon14, R.drawable.minieon15, R.drawable.minieon16,
+                R.drawable.minieon17, R.drawable.minieon18, R.drawable.minieon19, R.drawable.minieon20};
+
+        GalleryAdapter grid_adapter = new GalleryAdapter(
+                getApplicationContext(),
+                R.layout.row,
+                img);
+
+        Gallery g = (Gallery)findViewById(R.id.real_gallery);
+        g.setAdapter(grid_adapter);
+
+        final ImageView iv = (ImageView)findViewById(R.id.imageView1);
+
         TabHost.TabSpec ts1 = tabHost1.newTabSpec("Tab Spec 1");
-        ts1.setContent(R.id.content1);
-        ts1.setIndicator("Tab 1");
+        ts1.setContent(R.id.contacts);
+        ts1.setIndicator("CONTACTS");
         tabHost1.addTab(ts1);
 
         //두번째 탭
@@ -100,9 +115,6 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler1);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        //for debugging
-        TextView textView = (TextView)findViewById(R.id.showing);
-
         RecyclerAdapter adapter = new RecyclerAdapter();
         recyclerView.setAdapter(adapter);
 
@@ -110,35 +122,29 @@ public class MainActivity extends AppCompatActivity {
         {
             PhoneBook temp = datas.get(i);
             adapter.addItem(temp);
-            textView.setText(temp.getName());
         }
         adapter.notifyDataSetChanged();
 
         TabHost.TabSpec ts2 = tabHost1.newTabSpec("Tab Spec 2");
-        ts2.setContent(R.id.content2);
-        ts2.setIndicator("TAB 2");
+        ts2.setContent(R.id.real_gallery);
+        ts2.setIndicator("GALLERY");
         tabHost1.addTab(ts2);
 
         //세번째 탭
+        Button button = (Button) findViewById(R.id.BtnToNewAct);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), GGALGOM_Activity.class);
+                startActivity(intent);
+            }
+        });
+
         TabHost.TabSpec ts3 = tabHost1.newTabSpec("Tab Spec 3");
-        ts3.setContent(R.id.content3);
-        ts3.setIndicator("TAB 3");
+        ts3.setContent(R.id.ggalgom);
+        ts3.setIndicator("GGALGOM");
         tabHost1.addTab(ts3);
 
-        final int img[] = {R.drawable.minieon01, R.drawable.minieon02, R.drawable.minieon03,
-                R.drawable.minieon04, R.drawable.minieon05, R.drawable.minieon06,
-                R.drawable.minieon07, R.drawable.minieon08, R.drawable.minieon09, R.drawable.minieon10, R.drawable.minieon11,
-                R.drawable.minieon12, R.drawable.minieon13, R.drawable.minieon14, R.drawable.minieon15, R.drawable.minieon16,
-                R.drawable.minieon17, R.drawable.minieon18, R.drawable.minieon19, R.drawable.minieon20};
 
-        GalleryAdapter grid_adapter = new GalleryAdapter(
-                getApplicationContext(),
-                R.layout.row,
-                img);
-
-        Gallery g = (Gallery)findViewById(R.id.gallery);
-        g.setAdapter(grid_adapter);
-
-        final ImageView iv = (ImageView)findViewById(R.id.imageView1);
     }
 }
