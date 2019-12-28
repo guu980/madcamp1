@@ -6,36 +6,85 @@
     android:layout_height="match_parent"
     tools:context=".GGALGOM_Activity">
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="@drawable/ggalgom_background">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="731dp"
+        android:layout_height="411dp"
+        android:background="@drawable/background">
 
-            <!--
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/window"
-            android:src="@drawable/minieon01"
-            />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/room"
+            android:layout_width="727dp"
+            android:layout_height="312dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="100dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:layout_editor_absoluteX="2dp">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/bathroom"
-            android:src=""
-            />
-            -->
+            <ImageView
+                android:id="@+id/window"
+                android:layout_width="209dp"
+                android:layout_height="107dp"
+                android:layout_marginStart="76dp"
+                android:layout_marginLeft="76dp"
+                android:layout_marginTop="44dp"
+                android:src="@drawable/window_tilted"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <!--
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="50dp"
-            android:text="i love you"
-            ></TextView>
-            -->
+            <ImageView
+                android:id="@+id/bathroom"
+                android:layout_width="98dp"
+                android:layout_height="103dp"
+                android:layout_marginStart="120dp"
+                android:layout_marginLeft="120dp"
+                android:layout_marginTop="60dp"
+                android:src="@drawable/door_tilted"
+                app:layout_constraintStart_toEndOf="@+id/window"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/Clickeditem"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity = "center">
+            </LinearLayout>
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/tab"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="25dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <Button
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:onClick="onTabmenuButtonClicked"
+                android:text="MENU"
+                android:visibility="visible" />
+
+            <Gallery
+                android:id="@+id/tabmenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:spacing="20dp"
+                android:unselectedAlpha="0.2"
+                android:visibility="invisible" />
+
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
