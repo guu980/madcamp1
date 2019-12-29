@@ -1,7 +1,9 @@
 package com.example.ggalgom_1;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
@@ -24,6 +26,7 @@ import android.widget.Button;
 import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,6 +38,8 @@ import java.util.Locale;
 public class GGALGOM_Activity extends AppCompatActivity {
 
     Context context_for_popup = this;
+
+    //int added_item_index = 0;
 
     static SharedPreferences sharePref = null;
     static SharedPreferences.Editor editor = null;
@@ -157,22 +162,36 @@ public class GGALGOM_Activity extends AppCompatActivity {
         g_tab.setAdapter(tab_adapter);
 
         g_tab.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
             { // 선택되었을 때 콜백메서드
+                String selected_item = null;
+
+                switch(position)
+                {
+                    case 0:
+                        selected_item = "Aircon ";
+                        break;
+                    case 1:
+                        selected_item = "Bed ";
+                        break;
+                    case 2:
+                        selected_item = "Refrigerator ";
+                        break;
+                    case 3:
+                        selected_item = "Teddybear ";
+                        break;
+                    case 4:
+                        selected_item = "Trashcan ";
+                        break;
+                    default:
+                        finish();
+                        break;
+                }
 
                 //Toast messaging to notice
-                //Toast.makeText(GGALGOM_Activity.this, "wow", Toast.LENGTH_SHORT).show();
-
-                /*
-                // Make new Linear layout which include new image view
-                LinearLayout new_layout = new LinearLayout(getApplicationContext());
-
-                // Set Linear Layout's parameters. Linear layout fully fill the parent(room, which means the workspace) (So automatically place in the center)
-                LinearLayout.LayoutParams new_layout_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-                new_layout_params.gravity = Gravity.CENTER; //It will make imageView in the layout will be placed center of the LinearLayout
-                new_layout.setLayoutParams(new_layout_params);
-                 */
+                Toast.makeText(GGALGOM_Activity.this, selected_item + "is added!", Toast.LENGTH_SHORT).show();
 
                 // Make new Image View which should be included in created LinearLayout
                 ImageView iv = new ImageView(getApplicationContext());
@@ -184,11 +203,19 @@ public class GGALGOM_Activity extends AppCompatActivity {
 
                 iv.setImageResource(tabmenuimg[position]);  // imageView에 내용 추가
                 iv.setLayoutParams(layoutParams);  // imageView layout 설정
-                /*
-                ((ConstraintLayout) findViewById(R.id.room)).addView(new_layout);   //add created linearLayout in the room
-                new_layout.addView(iv); // add imageView in created linearLayout
-                 */
+                iv.setId(View.generateViewId()); // set imageView's id
+
                 ((ConstraintLayout) findViewById(R.id.room)).addView(iv);
+
+                // Set ConstraintSet to place in center
+                ConstraintSet constraintSet = new ConstraintSet();
+                ConstraintLayout room_constraintLayout = (ConstraintLayout)findViewById(R.id.room);
+                constraintSet.clone(room_constraintLayout);
+                constraintSet.connect(iv.getId(), ConstraintSet.END, R.id.room, ConstraintSet.END,0);
+                constraintSet.connect(iv.getId(), ConstraintSet.START, R.id.room, ConstraintSet.START,0);
+                constraintSet.connect(iv.getId(), ConstraintSet.TOP, R.id.room, ConstraintSet.TOP,0);
+                constraintSet.connect(iv.getId(), ConstraintSet.BOTTOM, R.id.room, ConstraintSet.BOTTOM,0);
+                constraintSet.applyTo(room_constraintLayout);
 
                 return false;
             }
