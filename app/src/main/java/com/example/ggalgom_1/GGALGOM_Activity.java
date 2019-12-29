@@ -32,17 +32,20 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 public class GGALGOM_Activity extends AppCompatActivity {
 
+    /* ---------------------------------Alarm System-------------------------------------*/
     Context context_for_popup = this;
-
-    //int added_item_index = 0;
 
     static SharedPreferences sharePref = null;
     static SharedPreferences.Editor editor = null;
+
+    /*----------------------------------Item Adding System-------------------------------------*/
+    HashMap<String, Integer> added_item_idmap = new HashMap<String, Integer>();
 
     private class DdayThread extends Thread{
         private static final String TAG = "DdayThread";
@@ -171,19 +174,19 @@ public class GGALGOM_Activity extends AppCompatActivity {
                 switch(position)
                 {
                     case 0:
-                        selected_item = "Aircon ";
+                        selected_item = "Aircon";
                         break;
                     case 1:
-                        selected_item = "Bed ";
+                        selected_item = "Bed";
                         break;
                     case 2:
-                        selected_item = "Refrigerator ";
+                        selected_item = "Refrigerator";
                         break;
                     case 3:
-                        selected_item = "Teddybear ";
+                        selected_item = "Teddybear";
                         break;
                     case 4:
-                        selected_item = "Trashcan ";
+                        selected_item = "Trashcan";
                         break;
                     default:
                         finish();
@@ -191,7 +194,7 @@ public class GGALGOM_Activity extends AppCompatActivity {
                 }
 
                 //Toast messaging to notice
-                Toast.makeText(GGALGOM_Activity.this, selected_item + "is added!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(GGALGOM_Activity.this, selected_item + " is added!", Toast.LENGTH_SHORT).show();
 
                 // Make new Image View which should be included in created LinearLayout
                 ImageView iv = new ImageView(getApplicationContext());
@@ -203,7 +206,9 @@ public class GGALGOM_Activity extends AppCompatActivity {
 
                 iv.setImageResource(tabmenuimg[position]);  // imageView에 내용 추가
                 iv.setLayoutParams(layoutParams);  // imageView layout 설정
-                iv.setId(View.generateViewId()); // set imageView's id
+                int new_item_id = View.generateViewId();
+                iv.setId(new_item_id); // set imageView's id
+                added_item_idmap.put(selected_item, new_item_id); //add id information
 
                 ((ConstraintLayout) findViewById(R.id.room)).addView(iv);
 
