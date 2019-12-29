@@ -48,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        /* Request permission to access the contacts */
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_CONTACTS)
@@ -74,13 +78,33 @@ public class MainActivity extends AppCompatActivity {
             // Permission has already been granted
         }
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
+        /* Organize the tab system */
         TabHost tabHost1 = (TabHost) findViewById(R.id.tabHost1) ;
         tabHost1.setup();
 
-        // 첫번째 탭
+        /* Organizing first tab */
+        PhoneBook phoneBook = new PhoneBook();
+        List<PhoneBook> datas = phoneBook.getcontacts(this); // it might should changd this to context
+
+        RecyclerView recyclerView = findViewById(R.id.recycler1);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        RecyclerAdapter adapter = new RecyclerAdapter();
+        recyclerView.setAdapter(adapter);
+
+        for(int i=datas.size()-1; i>=0; i--)
+        {
+            PhoneBook temp = datas.get(i);
+            adapter.addItem(temp);
+        }
+        adapter.notifyDataSetChanged();
+
+        TabHost.TabSpec ts1 = tabHost1.newTabSpec("Tab Spec 1");
+        ts1.setContent(R.id.contacts);
+        ts1.setIndicator("CONTACTS");
+        tabHost1.addTab(ts1);
+
+        /* Organizing Second tab */
         final int img[] = {R.drawable.minieon01, R.drawable.minieon02, R.drawable.minieon03,
                 R.drawable.minieon04, R.drawable.minieon05, R.drawable.minieon06,
                 R.drawable.minieon07, R.drawable.minieon08, R.drawable.minieon09, R.drawable.minieon10, R.drawable.minieon11,
@@ -97,40 +121,12 @@ public class MainActivity extends AppCompatActivity {
 
         final ImageView iv = (ImageView)findViewById(R.id.imageView1);
 
-        TabHost.TabSpec ts1 = tabHost1.newTabSpec("Tab Spec 1");
-        ts1.setContent(R.id.contacts);
-        ts1.setIndicator("CONTACTS");
-        tabHost1.addTab(ts1);
-
-        //두번째 탭
-        Context context = getApplicationContext();
-        ContactUtil contactUtil = new ContactUtil(context);
-        List<Contact> contacts = contactUtil.getContactList();
-
-
-        PhoneBook phoneBook = new PhoneBook();
-        // context = getApplicationContext();
-        List<PhoneBook> datas = phoneBook.getcontacts(this); // it might should changd this to context
-
-        RecyclerView recyclerView = findViewById(R.id.recycler1);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        RecyclerAdapter adapter = new RecyclerAdapter();
-        recyclerView.setAdapter(adapter);
-
-        for(int i=datas.size()-1; i>=0; i--)
-        {
-            PhoneBook temp = datas.get(i);
-            adapter.addItem(temp);
-        }
-        adapter.notifyDataSetChanged();
-
         TabHost.TabSpec ts2 = tabHost1.newTabSpec("Tab Spec 2");
         ts2.setContent(R.id.real_gallery);
         ts2.setIndicator("GALLERY");
         tabHost1.addTab(ts2);
 
-        //세번째 탭
+        /* Organizing third tab */
         Button button = (Button) findViewById(R.id.BtnToNewAct);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,7 +140,5 @@ public class MainActivity extends AppCompatActivity {
         ts3.setContent(R.id.ggalgom);
         ts3.setIndicator("GGALGOM");
         tabHost1.addTab(ts3);
-
-
     }
 }
