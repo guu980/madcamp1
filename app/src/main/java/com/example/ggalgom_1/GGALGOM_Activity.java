@@ -158,47 +158,37 @@ public class GGALGOM_Activity extends AppCompatActivity {
 
         g_tab.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view,
-                                           int position, long id) { // 선택되었을 때 콜백메서드
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
+            { // 선택되었을 때 콜백메서드
+
+                //Toast messaging to notice
                 //Toast.makeText(GGALGOM_Activity.this, "wow", Toast.LENGTH_SHORT).show();
 
+                /*
+                // Make new Linear layout which include new image view
                 LinearLayout new_layout = new LinearLayout(getApplicationContext());
 
-                LinearLayout.LayoutParams llayout_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.MATCH_PARENT);
+                // Set Linear Layout's parameters. Linear layout fully fill the parent(room, which means the workspace) (So automatically place in the center)
+                LinearLayout.LayoutParams new_layout_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                new_layout_params.gravity = Gravity.CENTER; //It will make imageView in the layout will be placed center of the LinearLayout
+                new_layout.setLayoutParams(new_layout_params);
+                 */
 
-                //llayout_params.gravity = Gravity.CENTER;
+                // Make new Image View which should be included in created LinearLayout
+                ImageView iv = new ImageView(getApplicationContext());
 
-                new_layout.setLayoutParams(llayout_params);
-
+                // Set Image View's parameters. Image View will have fixed size and should be placed in the center of LinearLayout(same location with room) by gravity property in above
                 final int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, getResources().getDisplayMetrics());
-
                 final int height = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, getResources().getDisplayMetrics());
-
-
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(width /* layout_width */,
-                        /*LinearLayout.LayoutParams.WRAP_CONTENT*/height /* layout_height */ /*1f*/ /* layout_weight */);
-
-                layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
-
-                ImageView iv = new ImageView(getApplicationContext());  // 새로 추가할 imageView 생성
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(width ,height);
 
                 iv.setImageResource(tabmenuimg[position]);  // imageView에 내용 추가
-
                 iv.setLayoutParams(layoutParams);  // imageView layout 설정
-
-                ((ConstraintLayout) findViewById(R.id.room)).addView(new_layout); // 기존 linearLayout에 imageView 추가
-
-                new_layout.addView(iv);
-
-                //R.drawable.view
-
-
-                //iv.setX(iv.getWidth()/2);
-
-                //iv.setY(-iv.getHeight()/2);
-
-                //iv.setg
+                /*
+                ((ConstraintLayout) findViewById(R.id.room)).addView(new_layout);   //add created linearLayout in the room
+                new_layout.addView(iv); // add imageView in created linearLayout
+                 */
+                ((ConstraintLayout) findViewById(R.id.room)).addView(iv);
 
                 return false;
             }
@@ -291,6 +281,7 @@ public class GGALGOM_Activity extends AppCompatActivity {
 
     /* ------------------------------------------------ Item Adding System --------------------------------------------------- */
 
+    /* Item list on/off button onClick handelr */
     public void onTabmenuButtonClicked(View v) {
         if (findViewById(R.id.tabmenu).getVisibility() == View.VISIBLE)
             findViewById(R.id.tabmenu).setVisibility(View.INVISIBLE); // or GONE
@@ -299,11 +290,9 @@ public class GGALGOM_Activity extends AppCompatActivity {
             findViewById(R.id.tabmenu).setVisibility(View.VISIBLE);
     };
 
-
-
     /* ------------------------------------------------ Alarm System -------------------------------------------------- */
     // Methods related to Calcuating date
-
+    /* Return each component's cycle by identifying id */
     private int getDday(int id)
     {
         int dday = 0;
@@ -329,7 +318,7 @@ public class GGALGOM_Activity extends AppCompatActivity {
         return dday;
     }
 
-
+    /* Return today's date string data */
     private List<String> getCurrentDate()
     {
         List<String> dataList = new ArrayList<String>();
@@ -361,7 +350,7 @@ public class GGALGOM_Activity extends AppCompatActivity {
         return dataList;
     }
 
-
+    /* Return the difference between today's date and input date */
     public int countdday(int myear, int mmonth, int mday)
     {
         try {

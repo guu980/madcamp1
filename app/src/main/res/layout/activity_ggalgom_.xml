@@ -30,16 +30,19 @@
             android:layout_width="727dp"
             android:layout_height="312dp"
             android:layout_gravity="center"
+            android:gravity = "center"
             android:layout_marginBottom="100dp"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:layout_editor_absoluteX="2dp">
 
+            <!--
             <LinearLayout
                 android:id="@+id/Clickeditem"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity = "center">
             </LinearLayout>
+            -->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
