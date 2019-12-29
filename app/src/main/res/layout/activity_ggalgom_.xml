@@ -18,6 +18,30 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
+        <Button
+            android:id="@+id/resetbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reset"
+            />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/room"
+            android:layout_width="727dp"
+            android:layout_height="312dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="100dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:layout_editor_absoluteX="2dp">
+
+            <LinearLayout
+                android:id="@+id/Clickeditem"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity = "center">
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageView
             android:id="@+id/window"
@@ -48,6 +72,34 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/tab"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="25dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:elevation="10dp">
+
+            <Button
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:onClick="onTabmenuButtonClicked"
+                android:text="MENU"
+                android:visibility="visible" />
+
+            <Gallery
+                android:id="@+id/tabmenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:spacing="20dp"
+                android:unselectedAlpha="0.2"
+                android:visibility="invisible" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/floorLayout"
