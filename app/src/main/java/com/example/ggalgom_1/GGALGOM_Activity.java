@@ -21,6 +21,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.DragEvent;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -34,6 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -239,39 +242,60 @@ public class GGALGOM_Activity extends AppCompatActivity {
                         Float setting_x_to = event.getX()-(view.getWidth()/2);
                         Float setting_y_to = event.getY()-(view.getHeight()/2);
 
-                        view.setX(setting_x_to);
-                        view.setY(setting_y_to);
-
-                        sharePref_item = getSharedPreferences("SHARE_PREF_ITEM", MODE_PRIVATE);
-                        editor_item = sharePref_item.edit();
                         int item_id = 0;
                         int img_size = 0;
                         switch ((String)view.getTag())
                         {
                             case "Aircon":
                                 item_id = 4;
-                                img_size = 150;
+                                img_size = 100;
                                 break;
                             case "Bed":
                                 item_id = 5;
-                                img_size = 200;
+                                img_size = 130;
                                 break;
                             case "Refrigerator":
-                                img_size = 200;
+                                img_size = 110;
                                 item_id = 6;
                                 break;
                             case "Teddybear":
-                                img_size = 100;
+                                img_size = 70;
                                 item_id = 7;
                                 break;
                             case "Trashcan":
-                                img_size = 100;
+                                img_size = 50;
                                 item_id = 8;
                                 break;
                             default:
                                 finish();
                                 break;
                         }
+
+                        LinearLayout blackhole = findViewById(R.id.blackhole_layout);
+                        if ((setting_x_to <= blackhole.getX() + blackhole.getWidth()/2
+                                && setting_x_to >= blackhole.getX() - blackhole.getWidth()/2
+                                &&(setting_y_to <= blackhole.getY() + blackhole.getHeight()/2
+                                    && setting_y_to >= blackhole.getY() - blackhole.getHeight()/2)))
+                        {
+                            if(findViewById(R.id.blackhole).getVisibility() ==  View.VISIBLE)
+                            {
+                                sharePref = getSharedPreferences("SHARE_PREF", MODE_PRIVATE);
+                                editor = sharePref.edit();
+                                sharePref_item = getSharedPreferences("SHARE_PREF_ITEM", MODE_PRIVATE);
+                                editor_item = sharePref_item.edit();
+                                deleteData(editor, item_id);
+                                deleteData_item(editor_item, item_id);
+                                break;
+                            }
+                        }
+
+
+                        view.setX(setting_x_to);
+                        view.setY(setting_y_to);
+
+                        sharePref_item = getSharedPreferences("SHARE_PREF_ITEM", MODE_PRIVATE);
+                        editor_item = sharePref_item.edit();
+
                         saveData_item(editor_item, setting_x_to, setting_y_to, img_size, item_id);
 
                         ConstraintLayout containView = (ConstraintLayout) v;
@@ -307,39 +331,97 @@ public class GGALGOM_Activity extends AppCompatActivity {
         @Override
         public void onClick(View view){
             /* Save Current Date into SharedPreference */
-            List<String> dateData =  getCurrentDate();
-            //saveData(editor,dateData.get(0), dateData.get(1), dateData.get(2), dateData.get(3), 3);
-
+            final List<String> dateData =  getCurrentDate();
             String Item = "GGalGGom!";
-            if (view.getId() == added_item_idmap.getOrDefault("Aircon", 0)){
+            int item_id = 0;
+            if (view.getId() == added_item_idmap.getOrDefault("Aircon", 0)) {
                 Item = "Aircon";
-                saveData(editor,dateData.get(0), dateData.get(1), dateData.get(2), dateData.get(3), 4);}
-            else if (view.getId() == added_item_idmap.getOrDefault("Bed", 0)){
+                item_id = 4;
+            }
+            else if (view.getId() == added_item_idmap.getOrDefault("Bed", 0)) {
                 Item = "Bed";
-                saveData(editor,dateData.get(0), dateData.get(1), dateData.get(2), dateData.get(3), 5);}
-            else if (view.getId() == added_item_idmap.getOrDefault("Refrigerator", 0)){
+                item_id = 5;
+            }
+            else if (view.getId() == added_item_idmap.getOrDefault("Refrigerator", 0)) {
                 Item = "Refrigerator";
-                saveData(editor,dateData.get(0), dateData.get(1), dateData.get(2), dateData.get(3), 6);}
-            else if (view.getId() == added_item_idmap.getOrDefault("Teddybear", 0)){
+                item_id = 6;
+            }
+            else if (view.getId() == added_item_idmap.getOrDefault("Teddybear", 0)) {
                 Item = "Teddybear";
-                saveData(editor,dateData.get(0), dateData.get(1), dateData.get(2), dateData.get(3), 7);}
-            else if (view.getId() == added_item_idmap.getOrDefault("Trashcan", 0)){
+                item_id = 7;
+            }
+            else if (view.getId() == added_item_idmap.getOrDefault("Trashcan", 0)) {
                 Item = "Trashcan";
-                saveData(editor,dateData.get(0), dateData.get(1), dateData.get(2), dateData.get(3), 8);}
-            else if (view.getId() == R.id.bathroom){
+                item_id = 8;
+            }
+            else if (view.getId() == R.id.bathroom) {
                 Item = "Bathroom";
-                saveData(editor,dateData.get(0), dateData.get(1), dateData.get(2), dateData.get(3), 3);}
-            else if (view.getId() == R.id.window){
+                item_id = 3;
+            }
+            else if (view.getId() == R.id.window) {
                 Item = "Window";
-                saveData(editor,dateData.get(0), dateData.get(1), dateData.get(2), dateData.get(3), 2);}
+                item_id = 2;
+            }
 
-            /* Save Current Date into SharedPreference */
-            new AlertDialog.Builder(context_for_popup).setTitle("Notice").setMessage(Item+ " Cleaning Alarm is set").setNeutralButton("Close", new DialogInterface.OnClickListener()
-            {public void onClick(DialogInterface dlg, int sumthin) {} }).show();
+            // 고뇌의 흔적
+            final int finalItem_id = item_id;
+            final int finalItem_id1 = item_id;
+            final int finalItem_id2 = item_id;
+            final String finalItem = Item;
+            final String finalItem1 = Item;
+            new AlertDialog.Builder(context_for_popup).setTitle("Notice").setMessage("What Do You Want to Do?")
+                    .setPositiveButton("Create", new  DialogInterface.OnClickListener()
+                    {@Override
+                        public void onClick(DialogInterface dlg, int sumthin)
+                        {
+                            saveData(editor,dateData.get(0), dateData.get(1), dateData.get(2), dateData.get(3), finalItem_id);
+                            new AlertDialog.Builder(context_for_popup).setTitle("Notice").setMessage(finalItem1 + " Cleaning Alarm is Set\n" + "Next Cleaning Day : \n "
+                            + doDateAdd(getDday(finalItem_id2)))
+                            .setNeutralButton("Close", new DialogInterface.OnClickListener()
+                            {public void onClick(DialogInterface dlg, int sumthin) {} })
+                            .show();
+                        }
+                    })
+                    .setNegativeButton("Delete", new DialogInterface.OnClickListener()
+                    {@Override
+                        public void onClick(DialogInterface dlg, int sumthin)
+                        {
+                            List<String> item_date_datalist = load_data(sharePref, finalItem_id1);
+                            if (item_date_datalist.get(0) == "")
+                            {
+                                Toast.makeText(GGALGOM_Activity.this, "!!!깰꼼!!!", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            else
+                            {
+                                new AlertDialog.Builder(context_for_popup).setTitle("Notice").setMessage(finalItem + " Cleaning Alarm is Deleted\n"
+                                        + "Expected Cleaning Day : \n "
+                                        + item_date_datalist.get(1) + "/"
+                                        + item_date_datalist.get(2) + "/"
+                                        + item_date_datalist.get(3)).setPositiveButton("Close", new DialogInterface.OnClickListener()
+                                {public void onClick(DialogInterface dlg, int sumthin) {} })
+                                        .show();
+                                deleteData(editor, finalItem_id1);
+                            }
+                        }
+                    })
+                    .setNeutralButton("Close", new DialogInterface.OnClickListener()
+                    {@Override
+                        public void onClick(DialogInterface dlg, int sumthin)
+                        {
+                        }
+                    })
+                    .show();
+
+            return;
+
         }
     }
 
 
+    /* --------------------------------------------- ON CREATE -------------------------------------------- */
+    /* --------------------------------------------- ON CREATE -------------------------------------------- */
+    /* --------------------------------------------- ON CREATE -------------------------------------------- */
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -412,6 +494,7 @@ public class GGALGOM_Activity extends AppCompatActivity {
             iv.setY(each_item_datalist.get(1));
 
             AlarmOnClickListner newitem_alarmlistner = new AlarmOnClickListner();
+
             iv.setOnClickListener(newitem_alarmlistner); //새로만든 item에 알람기능 추가
 
             ImageViewOnLongClickListener_for_drag iv_lclick_listener = new ImageViewOnLongClickListener_for_drag();
@@ -440,27 +523,29 @@ public class GGALGOM_Activity extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
             { // 선택되었을 때 콜백메서드
                 String selected_item = null;
-                int imgsize = 200;
+                int imgsize = 0;
 
                 switch(position)
                 {
                     case 0:
                         selected_item = "Aircon";
-                        imgsize = 150;
+                        imgsize = 100;
                         break;
                     case 1:
                         selected_item = "Bed";
+                        imgsize = 130;
                         break;
                     case 2:
                         selected_item = "Refrigerator";
+                        imgsize = 110;
                         break;
                     case 3:
                         selected_item = "Teddybear";
-                        imgsize = 100;
+                        imgsize = 70;
                         break;
                     case 4:
                         selected_item = "Trashcan";
-                        imgsize = 100;
+                        imgsize = 50;
                         break;
                     default:
                         finish();
@@ -520,22 +605,69 @@ public class GGALGOM_Activity extends AppCompatActivity {
         sharePref = getSharedPreferences("SHARE_PREF", MODE_PRIVATE);
         editor = sharePref.edit();
 
-//        /* Floor onClick listener (id = 1) */
-//        ConstraintLayout layout_floor = (ConstraintLayout) findViewById(R.id.floorLayout);
-//        layout_floor.setOnClickListener(new ConstraintLayout.OnClickListener()
-//        {
-//            @Override
-//            public void onClick(View view)
-//            {
-//                /* Save Current Date into SharedPreference */
-//                List<String> dateData =  getCurrentDate();
-//                saveData(editor,dateData.get(0), dateData.get(1), dateData.get(2), dateData.get(3), 1);
-//
-//                /* Show popup to notice alarm is set */
-//                new AlertDialog.Builder(context_for_popup).setTitle("Notice").setMessage("Floor Cleaning Alarm is set").setNeutralButton("Close", new DialogInterface.OnClickListener()
-//                {public void onClick(DialogInterface dlg, int sumthin) {} }).show();
-//            }
-//        });
+        /* Floor onClick listener (id = 1) */
+        ConstraintLayout layout_floor = (ConstraintLayout) findViewById(R.id.floorLayout);
+        layout_floor.setOnClickListener(new ConstraintLayout.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                /* Save Current Date into SharedPreference */
+                final List<String> dateData =  getCurrentDate();
+                saveData(editor,dateData.get(0), dateData.get(1), dateData.get(2), dateData.get(3), 1);
+                int item_id = 1;
+                String Item = "floor";
+
+                final int finalItem_id = item_id;
+                final int finalItem_id1 = item_id;
+                final int finalItem_id2 = item_id;
+                final String finalItem = Item;
+                final String finalItem1 = Item;
+                new AlertDialog.Builder(context_for_popup).setTitle("Notice").setMessage("What Do You Want to Do?")
+                        .setPositiveButton("Create", new  DialogInterface.OnClickListener()
+                        {@Override
+                        public void onClick(DialogInterface dlg, int sumthin)
+                        {
+                            saveData(editor,dateData.get(0), dateData.get(1), dateData.get(2), dateData.get(3), finalItem_id);
+                            new AlertDialog.Builder(context_for_popup).setTitle("Notice").setMessage(finalItem1 + " Cleaning Alarm is Set\n" + "Next Cleaning Day : \n "
+                                    + doDateAdd(getDday(finalItem_id2)))
+                                    .setNeutralButton("Close", new DialogInterface.OnClickListener()
+                                    {public void onClick(DialogInterface dlg, int sumthin) {} })
+                                    .show();
+                        }
+                        })
+                        .setNegativeButton("Delete", new DialogInterface.OnClickListener()
+                        {@Override
+                        public void onClick(DialogInterface dlg, int sumthin)
+                        {
+                            List<String> item_date_datalist = load_data(sharePref, finalItem_id1);
+                            if (item_date_datalist.get(0) == "")
+                            {
+                                Toast.makeText(GGALGOM_Activity.this, "!!!깰꼼!!!", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            else
+                            {
+                                new AlertDialog.Builder(context_for_popup).setTitle("Notice").setMessage(finalItem + " Cleaning Alarm is Deleted\n"
+                                        + "Expected Cleaning Day : \n "
+                                        + item_date_datalist.get(1) + "/"
+                                        + item_date_datalist.get(2) + "/"
+                                        + item_date_datalist.get(3)).setPositiveButton("Close", new DialogInterface.OnClickListener()
+                                {public void onClick(DialogInterface dlg, int sumthin) {} })
+                                        .show();
+                                deleteData(editor, finalItem_id1);
+                            }
+                        }
+                        })
+                        .setNeutralButton("Close", new DialogInterface.OnClickListener()
+                        {@Override
+                        public void onClick(DialogInterface dlg, int sumthin)
+                        {
+                        }
+                        })
+                        .show();
+            }
+        });
 
         /* Window, Bathroom Onclick Listner */
         AlarmOnClickListner alarmlistner = new AlarmOnClickListner();
@@ -564,6 +696,9 @@ public class GGALGOM_Activity extends AppCompatActivity {
             }
         });
     }
+    /* --------------------------------------------- ON CREATE -------------------------------------------- */
+    /* --------------------------------------------- ON CREATE -------------------------------------------- */
+    /* --------------------------------------------- ON CREATE -------------------------------------------- */
 
 
     /* ------------------------------------------------ Item Adding System --------------------------------------------------- */
@@ -577,6 +712,124 @@ public class GGALGOM_Activity extends AppCompatActivity {
             findViewById(R.id.tabmenu).setVisibility(View.VISIBLE);
     };
 
+    /* Save each component's item data in SharedPreferences */
+    public void saveData_item(SharedPreferences.Editor editor, float x, float y, int img_size, int id)
+    {
+        String first = null;
+
+        /* Identify the component by id */
+        switch(id){
+            case 4:
+                first = "Aircon";
+                break;
+            case 5:
+                first = "Bed";
+                break;
+            case 6:
+                first = "Refrigerator";
+                break;
+            case 7:
+                first = "Teddybear";
+                break;
+            case 8:
+                first = "Trashcan";
+                break;
+            default:
+                finish();
+                break;
+        }
+
+        editor.putFloat(first + "_x", x);
+
+        editor.putFloat(first + "_y", y);
+
+        editor.putFloat(first + "_size", img_size);
+
+        //apply modified data
+        editor.apply();
+    }
+
+    /* Remove each component's item data in SharedPreferences */
+    public void deleteData_item(SharedPreferences.Editor editor, int id)
+    {
+        String first = null;
+
+        /* Identify the component by id */
+        switch(id){
+            case 4:
+                first = "Aircon";
+                break;
+            case 5:
+                first = "Bed";
+                break;
+            case 6:
+                first = "Refrigerator";
+                break;
+            case 7:
+                first = "Teddybear";
+                break;
+            case 8:
+                first = "Trashcan";
+                break;
+            default:
+                finish();
+                break;
+        }
+
+        editor.remove(first + "_x");
+
+        editor.remove(first + "_y");
+
+        editor.remove(first + "_size");
+
+        //apply modified data
+        editor.commit();
+    }
+
+    /* Load component's item data from SharedPreferences */
+    public List<Float> load_data_item(SharedPreferences sharePref, int id)
+    {
+        String first = null;
+
+        /* Identify the component by id */
+        switch(id){
+            case 4:
+                first = "Aircon";
+                break;
+            case 5:
+                first = "Bed";
+                break;
+            case 6:
+                first = "Refrigerator";
+                break;
+            case 7:
+                first = "Teddybear";
+                break;
+            case 8:
+                first = "Trashcan";
+                break;
+            default:
+                finish();
+                break;
+        }
+
+        List<Float> dataList= new ArrayList<Float>();
+        dataList.add(sharePref.getFloat(first+"_x", -1 ));
+        dataList.add(sharePref.getFloat(first+"_y",-1 ));
+        dataList.add(sharePref.getFloat(first + "_size", -1));
+
+        return dataList;
+    }
+
+    /*----------------------------------------------Black Hole ---------------------------------------------------------*/
+    /* Item list on/off button onClick handelr */
+    public void onBlackholeButtonClicked(View v) {
+        if (findViewById(R.id.blackhole).getVisibility() == View.VISIBLE)
+            findViewById(R.id.blackhole).setVisibility(View.INVISIBLE); // or GONE
+
+        else
+            findViewById(R.id.blackhole).setVisibility(View.VISIBLE);
+    };
     /* ------------------------------------------------ Alarm System -------------------------------------------------- */
     // Methods related to Calcuating date
     /* Return each component's cycle by identifying id */
@@ -602,7 +855,7 @@ public class GGALGOM_Activity extends AppCompatActivity {
                 dday = 0;
                 break;
             case 5:
-                //dday= 14;
+                //dday= 60;
                 dday = 0;
                 break;
             case 6:
@@ -610,11 +863,11 @@ public class GGALGOM_Activity extends AppCompatActivity {
                 dday = 0;
                 break;
             case 7:
-                //dday= 14;
+                //dday= 90;
                 dday = 0;
                 break;
             case 8:
-                //dday= 14;
+                //dday= 3;
                 dday = 0;
                 break;
             default:
@@ -655,6 +908,22 @@ public class GGALGOM_Activity extends AppCompatActivity {
         dataList.add(day);
 
         return dataList;
+    }
+
+    /* Return Added Day */
+    public String doDateAdd(int day)
+    {
+        Calendar cal = new GregorianCalendar(Locale.KOREA);
+        cal.setTime(new Date());
+        //cal.add(Calendar.YEAR, 1); // 1년을 더한다.
+        //cal.add(Calendar.MONTH, 1); // 한달을 더한다.
+        cal.add(Calendar.DAY_OF_YEAR, day); // 하루를 더한다.
+        //cal.add(Calendar.HOUR, 1); // 시간을 더한다
+
+        SimpleDateFormat fm = new SimpleDateFormat(
+                "yyyy/MM/dd");
+        String strDate = fm.format(cal.getTime());
+        return strDate;
     }
 
     /* Return the difference between today's date and input date */
@@ -749,42 +1018,6 @@ public class GGALGOM_Activity extends AppCompatActivity {
         editor.apply();
     }
 
-    public void saveData_item(SharedPreferences.Editor editor, float x, float y, int img_size, int id)
-    {
-        String first = null;
-
-        /* Identify the component by id */
-        switch(id){
-            case 4:
-                first = "Aircon";
-                break;
-            case 5:
-                first = "Bed";
-                break;
-            case 6:
-                first = "Refrigerator";
-                break;
-            case 7:
-                first = "Teddybear";
-                break;
-            case 8:
-                first = "Trashcan";
-                break;
-            default:
-                finish();
-                break;
-        }
-
-        editor.putFloat(first + "_x", x);
-
-        editor.putFloat(first + "_y", y);
-
-        editor.putFloat(first + "_size", img_size);
-
-        //apply modified data
-        editor.apply();
-    }
-
     /* Remove each component's date data in SharedPreferences */
     public void deleteData(SharedPreferences.Editor editor, int id)
     {
@@ -837,43 +1070,6 @@ public class GGALGOM_Activity extends AppCompatActivity {
         editor.commit();
     }
 
-    /* Remove each component's date data in SharedPreferences */
-    public void deleteData_item(SharedPreferences.Editor editor, int id)
-    {
-        String first = null;
-
-        /* Identify the component by id */
-        switch(id){
-            case 4:
-                first = "Aircon";
-                break;
-            case 5:
-                first = "Bed";
-                break;
-            case 6:
-                first = "Refrigerator";
-                break;
-            case 7:
-                first = "Teddybear";
-                break;
-            case 8:
-                first = "Trashcan";
-                break;
-            default:
-                finish();
-                break;
-        }
-
-        editor.remove(first + "_x");
-
-        editor.remove(first + "_y");
-
-        editor.remove(first + "_size");
-
-        //apply modified data
-        editor.commit();
-    }
-
     /* Load component's date data from SharedPreferences */
     public List<String> load_data(SharedPreferences sharePref, int id)
     {
@@ -910,61 +1106,11 @@ public class GGALGOM_Activity extends AppCompatActivity {
                 break;
         }
 
-        /* for debugging
-        Log.v("Loading","Brought weekday = " + sharePref.getString(first+"_wd","" ) + "\n"
-                +"Weekday key = " + first+"_wd" + "\n"
-                +"Is weekday key exists? = " + sharePref.contains(first+"_wd") + "\n"
-                + "Brought year = " + sharePref.getString(first+"_y","" ) + "\n"
-                + "Year key = " + first+"_y" + "\n"
-                +"Is year key exists? = " + sharePref.contains(first+"_y") + "\n"
-                + "Brought month = " + sharePref.getString(first+"_m","" ) + "\n"
-                + "Month key = " + first+"_m" + "\n"
-                +"Is month key exists? = " + sharePref.contains(first+"_m") + "\n"
-                + "Brought day = " + sharePref.getString(first+"_d","" ) + "\n"
-                + "Day key = " + first+"_d"+ "\n"
-                +"Is month key exists? = " + sharePref.contains(first+"_d") + "\n");
-                */
-
         List<String> dataList= new ArrayList<String>();
         dataList.add(sharePref.getString(first+"_wd","" ));
         dataList.add(sharePref.getString(first+"_y","" ));
         dataList.add(sharePref.getString(first+"_m","" ));
         dataList.add(sharePref.getString(first+"_d","" ));
-
-        return dataList;
-    }
-
-    /* Load component's date data from SharedPreferences */
-    public List<Float> load_data_item(SharedPreferences sharePref, int id)
-    {
-        String first = null;
-
-        /* Identify the component by id */
-        switch(id){
-            case 4:
-                first = "Aircon";
-                break;
-            case 5:
-                first = "Bed";
-                break;
-            case 6:
-                first = "Refrigerator";
-                break;
-            case 7:
-                first = "Teddybear";
-                break;
-            case 8:
-                first = "Trashcan";
-                break;
-            default:
-                finish();
-                break;
-        }
-
-        List<Float> dataList= new ArrayList<Float>();
-        dataList.add(sharePref.getFloat(first+"_x", -1 ));
-        dataList.add(sharePref.getFloat(first+"_y",-1 ));
-        dataList.add(sharePref.getFloat(first + "_size", -1));
 
         return dataList;
     }
@@ -992,7 +1138,7 @@ public class GGALGOM_Activity extends AppCompatActivity {
 
         // id값은
         // 정의해야하는 각 알림의 고유한 int값
-        notificationManager.notify(/*1*/id, builder.build());
+        notificationManager.notify(id, builder.build());
     }
 
     /* Remvoe notification */
