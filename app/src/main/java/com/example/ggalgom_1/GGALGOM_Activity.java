@@ -46,6 +46,9 @@ public class GGALGOM_Activity extends AppCompatActivity {
     static SharedPreferences sharePref = null;
     static SharedPreferences.Editor editor = null;
 
+    static SharedPreferences sharePref_item = null;
+    static SharedPreferences.Editor editor_item = null;
+
     HashMap<String, Integer> added_item_idmap = new HashMap<String, Integer>();
 
     private class DdayThread extends Thread{
@@ -161,7 +164,7 @@ public class GGALGOM_Activity extends AppCompatActivity {
     }
 
 
-    class ImageViewOnClickListener_for_drag implements ImageView.OnLongClickListener
+    class ImageViewOnLongClickListener_for_drag implements ImageView.OnLongClickListener
     {
         @Override
         public boolean onLongClick(View view)
@@ -238,10 +241,43 @@ public class GGALGOM_Activity extends AppCompatActivity {
                         temp_layout_param.topMargin = (int) (event.getY());
                         view.setLayoutParams(temp_layout_param);
                          */
+                        Float setting_x_to = event.getX()-(view.getWidth()/2);
+                        Float setting_y_to = event.getY()-(view.getHeight()/2);
 
+                        view.setX(setting_x_to);
+                        view.setY(setting_y_to);
 
-                        view.setX(event.getX()-(view.getWidth()/2));
-                        view.setY(event.getY()-(view.getHeight()/2));
+                        sharePref_item = getSharedPreferences("SHARE_PREF_ITEM", MODE_PRIVATE);
+                        editor_item = sharePref_item.edit();
+                        int item_id = 0;
+                        int img_size = 0;
+                        switch ((String)view.getTag())
+                        {
+                            case "Aircon":
+                                item_id = 4;
+                                img_size = 150;
+                                break;
+                            case "Bed":
+                                item_id = 5;
+                                img_size = 200;
+                                break;
+                            case "Refrigerator":
+                                img_size = 200;
+                                item_id = 6;
+                                break;
+                            case "Teddybear":
+                                img_size = 100;
+                                item_id = 7;
+                                break;
+                            case "Trashcan":
+                                img_size = 100;
+                                item_id = 8;
+                                break;
+                            default:
+                                finish();
+                                break;
+                        }
+                        saveData_item(editor_item, setting_x_to, setting_y_to, img_size, item_id);
 
                         ConstraintLayout containView = (ConstraintLayout) v;
                         containView.addView(view);
@@ -272,6 +308,7 @@ public class GGALGOM_Activity extends AppCompatActivity {
     }
 
     class AlarmOnClickListner implements ImageView.OnClickListener{
+        @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void onClick(View view){
             /* Save Current Date into SharedPreference */
@@ -308,6 +345,7 @@ public class GGALGOM_Activity extends AppCompatActivity {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -322,7 +360,72 @@ public class GGALGOM_Activity extends AppCompatActivity {
 
         /* ------------------------------------ Item Adding System -------------------------------------------- */
 
-        final ImageViewOnClickListener_for_drag drag_longclicklistener = new ImageViewOnClickListener_for_drag();
+        sharePref_item = getSharedPreferences("SHARE_PREF_ITEM", MODE_PRIVATE);
+        editor_item = sharePref_item.edit();
+
+        List<Float> each_item_datalist = new ArrayList<Float>();
+
+        for(int i = 4; i <= 8; i++)
+        {
+            each_item_datalist = load_data_item(sharePref_item, i);
+            if(each_item_datalist.get(0) == -1)
+            {
+                continue;
+            }
+            ImageView iv = new ImageView(getApplicationContext());
+            final int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, each_item_datalist.get(2), getResources().getDisplayMetrics());
+            final int height = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, each_item_datalist.get(2), getResources().getDisplayMetrics());
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(width ,height);
+
+            int img_source = 0;
+            String selected_item = null;
+            switch(i)
+            {
+                case 4:
+                    selected_item = "Aircon";
+                    img_source = R.drawable.aircon;
+                    break;
+                case 5:
+                    selected_item = "Bed";
+                    img_source = R.drawable.bed;
+                    break;
+                case 6:
+                    selected_item = "Refrigerator";
+                    img_source = R.drawable.refrigerator;
+                    break;
+                case 7:
+                    selected_item = "Teddybear";
+                    img_source = R.drawable.teddybear;
+                    break;
+                case 8:
+                    selected_item = "Trashcan";
+                    img_source = R.drawable.trashcan;
+                    break;
+                default:
+                    break;
+            }
+            iv.setImageResource(img_source);  // imageView에 내용 추가
+            iv.setLayoutParams(layoutParams);  // imageView layout 설정
+
+            int new_item_id = View.generateViewId();
+            iv.setId(new_item_id); // set imageView's id
+            added_item_idmap.put(selected_item, new_item_id); //add id information
+
+            iv.setTag(selected_item);
+
+            iv.setX(each_item_datalist.get(0));
+            iv.setY(each_item_datalist.get(1));
+
+            AlarmOnClickListner newitem_alarmlistner = new AlarmOnClickListner();
+            iv.setOnClickListener(newitem_alarmlistner); //새로만든 item에 알람기능 추가
+
+            ImageViewOnLongClickListener_for_drag iv_lclick_listner = new ImageViewOnLongClickListener_for_drag();
+            iv.setOnLongClickListener(iv_lclick_listner);
+
+            ((ConstraintLayout) findViewById(R.id.room)).addView(iv);
+        }
+
+        final ImageViewOnLongClickListener_for_drag iv_lclick_listner = new ImageViewOnLongClickListener_for_drag();
         DragListener drag_listener = new DragListener();
 
         final int tabmenuimg[] = {R.drawable.aircon, R.drawable.bed, R.drawable.refrigerator,
@@ -407,8 +510,7 @@ public class GGALGOM_Activity extends AppCompatActivity {
                 constraintSet.connect(iv.getId(), ConstraintSet.BOTTOM, R.id.room, ConstraintSet.BOTTOM,0);
                 constraintSet.applyTo(room_constraintLayout);
 
-                iv.setOnLongClickListener(drag_longclicklistener);
-
+                iv.setOnLongClickListener(iv_lclick_listner);
 
                 return false;
             }
@@ -660,6 +762,42 @@ public class GGALGOM_Activity extends AppCompatActivity {
         editor.apply();
     }
 
+    public void saveData_item(SharedPreferences.Editor editor, float x, float y, int img_size, int id)
+    {
+        String first = null;
+
+        /* Identify the component by id */
+        switch(id){
+            case 4:
+                first = "Aircon";
+                break;
+            case 5:
+                first = "Bed";
+                break;
+            case 6:
+                first = "Refrigerator";
+                break;
+            case 7:
+                first = "Teddybear";
+                break;
+            case 8:
+                first = "Trashcan";
+                break;
+            default:
+                finish();
+                break;
+        }
+
+        editor.putFloat(first + "_x", x);
+
+        editor.putFloat(first + "_y", y);
+
+        editor.putFloat(first + "_size", img_size);
+
+        //apply modified data
+        editor.apply();
+    }
+
     /* Remove each component's date data in SharedPreferences */
     public void deleteData(SharedPreferences.Editor editor, int id)
     {
@@ -707,6 +845,43 @@ public class GGALGOM_Activity extends AppCompatActivity {
 
         //put day
         editor.remove(first + "_d");
+
+        //apply modified data
+        editor.commit();
+    }
+
+    /* Remove each component's date data in SharedPreferences */
+    public void deleteData_item(SharedPreferences.Editor editor, int id)
+    {
+        String first = null;
+
+        /* Identify the component by id */
+        switch(id){
+            case 4:
+                first = "Aircon";
+                break;
+            case 5:
+                first = "Bed";
+                break;
+            case 6:
+                first = "Refrigerator";
+                break;
+            case 7:
+                first = "Teddybear";
+                break;
+            case 8:
+                first = "Trashcan";
+                break;
+            default:
+                finish();
+                break;
+        }
+
+        editor.remove(first + "_x");
+
+        editor.remove(first + "_y");
+
+        editor.remove(first + "_size");
 
         //apply modified data
         editor.commit();
@@ -768,6 +943,41 @@ public class GGALGOM_Activity extends AppCompatActivity {
         dataList.add(sharePref.getString(first+"_y","" ));
         dataList.add(sharePref.getString(first+"_m","" ));
         dataList.add(sharePref.getString(first+"_d","" ));
+
+        return dataList;
+    }
+
+    /* Load component's date data from SharedPreferences */
+    public List<Float> load_data_item(SharedPreferences sharePref, int id)
+    {
+        String first = null;
+
+        /* Identify the component by id */
+        switch(id){
+            case 4:
+                first = "Aircon";
+                break;
+            case 5:
+                first = "Bed";
+                break;
+            case 6:
+                first = "Refrigerator";
+                break;
+            case 7:
+                first = "Teddybear";
+                break;
+            case 8:
+                first = "Trashcan";
+                break;
+            default:
+                finish();
+                break;
+        }
+
+        List<Float> dataList= new ArrayList<Float>();
+        dataList.add(sharePref.getFloat(first+"_x", -1 ));
+        dataList.add(sharePref.getFloat(first+"_y",-1 ));
+        dataList.add(sharePref.getFloat(first + "_size", -1));
 
         return dataList;
     }
