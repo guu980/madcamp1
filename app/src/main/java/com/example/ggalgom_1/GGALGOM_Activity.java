@@ -458,6 +458,9 @@ public class GGALGOM_Activity extends AppCompatActivity {
             {
                 editor.clear();
                 editor.commit();
+                ConstraintLayout room = findViewById(R.id.room);
+                room.removeAllViews();
+                Toast.makeText(GGALGOM_Activity.this, "!!!!!!CRASH!!!!!!!!", Toast.LENGTH_SHORT).show();
             }
         });
 

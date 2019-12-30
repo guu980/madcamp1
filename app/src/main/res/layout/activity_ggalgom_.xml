@@ -15,51 +15,21 @@
 
         <Button
             android:id="@+id/resetbutton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Reset"
-            />
+            android:layout_width="116dp"
+            android:layout_height="97dp"
+            android:background="@drawable/hammer" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/room"
-            android:layout_width="match_parent"
-            android:layout_height="312dp"
+        <ImageView
+            android:id="@+id/window"
+            android:layout_width="209dp"
+            android:layout_height="107dp"
+            android:src="@drawable/window_tilted"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            >
-
-            <ImageView
-                android:id="@+id/bathroom"
-                android:layout_width="98dp"
-                android:layout_height="103dp"
-                android:src="@drawable/door_tilted"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.9"
-                app:layout_constraintVertical_bias="0.37"
-                />
-
-            <ImageView
-                android:id="@+id/window"
-                android:layout_width="209dp"
-                android:layout_height="107dp"
-                android:src="@drawable/window_tilted"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.17"
-                app:layout_constraintVertical_bias="0.2"/>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/floorLayout"
-                android:layout_width="match_parent"
-                android:layout_height="110dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.17"
+            app:layout_constraintVertical_bias="0.2"/>
 
         <!-- for debugging -->
         <!--
@@ -68,6 +38,31 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/room"
+            android:layout_width="match_parent"
+            android:layout_height="312dp"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="-56dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/floorLayout"
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                app:layout_constraintBottom_toBottomOf="parent" >
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ImageView
+                android:id="@+id/bathroom"
+                android:layout_width="98dp"
+                android:layout_height="103dp"
+                android:src="@drawable/door_tilted"
+                tools:layout_editor_absoluteX="530dp"
+                tools:layout_editor_absoluteY="111dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/tab"
             android:layout_width="match_parent"
@@ -80,10 +75,10 @@
             android:elevation="10dp">
 
             <Button
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="105dp"
+                android:layout_height="104dp"
+                android:background="@drawable/kaist"
                 android:onClick="onTabmenuButtonClicked"
-                android:text="MENU"
                 android:visibility="visible" />
 
             <Gallery
