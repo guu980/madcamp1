@@ -26,30 +26,32 @@
             android:layout_height="312dp"
             app:layout_constraintTop_toTopOf="parent"
             >
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <ImageView
-            android:id="@+id/window"
-            android:layout_width="209dp"
-            android:layout_height="107dp"
-            android:layout_marginStart="76dp"
-            android:layout_marginLeft="76dp"
-            android:layout_marginTop="44dp"
-            android:src="@drawable/window_tilted"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/bathroom"
             android:layout_width="98dp"
             android:layout_height="103dp"
-            android:layout_marginStart="120dp"
-            android:layout_marginLeft="120dp"
-            android:layout_marginTop="60dp"
             android:src="@drawable/door_tilted"
-            app:layout_constraintStart_toEndOf="@+id/window"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.9"
+            app:layout_constraintVertical_bias="0.37"
+            />
+
+        <ImageView
+            android:id="@+id/window"
+            android:layout_width="209dp"
+            android:layout_height="107dp"
+            android:src="@drawable/window_tilted"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.17"
+            app:layout_constraintVertical_bias="0.2"/>
 
         <!-- for debugging -->
         <!--

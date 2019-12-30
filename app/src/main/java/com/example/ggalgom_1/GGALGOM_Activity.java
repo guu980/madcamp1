@@ -10,16 +10,15 @@ import androidx.core.app.NotificationManagerCompat;
 import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.ClipData;
+import android.content.ClipDescription;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -44,7 +43,6 @@ public class GGALGOM_Activity extends AppCompatActivity {
     static SharedPreferences sharePref = null;
     static SharedPreferences.Editor editor = null;
 
-    /*----------------------------------Item Adding System-------------------------------------*/
     HashMap<String, Integer> added_item_idmap = new HashMap<String, Integer>();
 
     private class DdayThread extends Thread{
@@ -221,6 +219,32 @@ public class GGALGOM_Activity extends AppCompatActivity {
                 constraintSet.connect(iv.getId(), ConstraintSet.TOP, R.id.room, ConstraintSet.TOP,0);
                 constraintSet.connect(iv.getId(), ConstraintSet.BOTTOM, R.id.room, ConstraintSet.BOTTOM,0);
                 constraintSet.applyTo(room_constraintLayout);
+
+                /*
+                iv.setOnLongClickListener(new ImageView.OnLongClickListener(){
+                    @Override
+                    public boolean onLongClick(View view){
+
+                        // 태그 생성
+                        ClipData.Item item = new ClipData.Item( (CharSequence) view.getTag() );
+
+                        String[] mimeTypes = { ClipDescription.MIMETYPE_TEXT_PLAIN };
+                        ClipData data = new ClipData(view.getTag().toString(),   mimeTypes, item);
+                        View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(
+                                view);
+
+                        view.startDrag(data, // data to be dragged
+                                shadowBuilder, // drag shadow
+                                view, // 드래그 드랍할  Vew
+                                0 // 필요없은 플래그
+                        );
+
+                        view.setVisibility(View.INVISIBLE);
+                        return true;
+
+                    }
+                });
+                 */
 
                 return false;
             }
