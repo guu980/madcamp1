@@ -15,8 +15,8 @@
 
         <Button
             android:id="@+id/resetbutton"
-            android:layout_width="116dp"
-            android:layout_height="97dp"
+            android:layout_width="100dp"
+            android:layout_height="80dp"
             android:background="@drawable/hammer" />
 
         <ImageView
@@ -30,6 +30,27 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.17"
             app:layout_constraintVertical_bias="0.2"/>
+
+        <ImageView
+            android:id="@+id/bathroom"
+            android:layout_width="98dp"
+            android:layout_height="103dp"
+            android:src="@drawable/door_tilted"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.8"
+            app:layout_constraintVertical_bias="0.29"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/floorLayout"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            app:layout_constraintBottom_toBottomOf="parent" >
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <!-- for debugging -->
         <!--
@@ -45,21 +66,6 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:layout_editor_absoluteX="-56dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/floorLayout"
-                android:layout_width="match_parent"
-                android:layout_height="110dp"
-                app:layout_constraintBottom_toBottomOf="parent" >
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <ImageView
-                android:id="@+id/bathroom"
-                android:layout_width="98dp"
-                android:layout_height="103dp"
-                android:src="@drawable/door_tilted"
-                tools:layout_editor_absoluteX="530dp"
-                tools:layout_editor_absoluteY="111dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
