@@ -63,7 +63,7 @@ public class GGALGOM_Activity extends AppCompatActivity {
                     int[] notification_id = {0};
 
                     /* Iterate all components (basic component = 1:floor, 2:window, 3:restroom) */
-                    for (int i = 1; i < 4; i++) {
+                    for (int i = 1; i < 9; i++) {
                         String notification_title = null;
                         String notification_context = null;
 
@@ -80,6 +80,26 @@ public class GGALGOM_Activity extends AppCompatActivity {
                             case 3:
                                 notification_title = "Bathroom";
                                 notification_context = "It's time to Clean Bathroom!";
+                                break;
+                            case 4:
+                                notification_title = "Aircon";
+                                notification_context = "It's time to Clean Aircon!";
+                                break;
+                            case 5:
+                                notification_title = "Bed";
+                                notification_context = "It's time to Clean Bed!";
+                                break;
+                            case 6:
+                                notification_title = "Refrigerator";
+                                notification_context = "It's time to Clean Refrigerator!";
+                                break;
+                            case 7:
+                                notification_title = "TeddyBear";
+                                notification_context = "It's time to Clean TeddyBear!";
+                                break;
+                            case 8:
+                                notification_title = "Trashcan";
+                                notification_context = "It's time to Clean Trashcan!";
                                 break;
                             default:
                                 finish();
@@ -136,6 +156,45 @@ public class GGALGOM_Activity extends AppCompatActivity {
             }
         }
     }
+
+    /* --------------------------Alarm OnclickListner------------------------------------*/
+    class AlarmOnClickListner implements ImageView.OnClickListener{
+        @Override
+        public void onClick(View view){
+            /* Save Current Date into SharedPreference */
+            List<String> dateData =  getCurrentDate();
+            //saveData(editor,dateData.get(0), dateData.get(1), dateData.get(2), dateData.get(3), 3);
+
+            String Item = "GGalGGom!";
+            if (view.getId() == added_item_idmap.getOrDefault("Aircon", 0)){
+                Item = "Aircon";
+                saveData(editor,dateData.get(0), dateData.get(1), dateData.get(2), dateData.get(3), 4);}
+            else if (view.getId() == added_item_idmap.getOrDefault("Bed", 0)){
+                Item = "Bed";
+                saveData(editor,dateData.get(0), dateData.get(1), dateData.get(2), dateData.get(3), 5);}
+            else if (view.getId() == added_item_idmap.getOrDefault("Refrigerator", 0)){
+                Item = "Refrigerator";
+                saveData(editor,dateData.get(0), dateData.get(1), dateData.get(2), dateData.get(3), 6);}
+            else if (view.getId() == added_item_idmap.getOrDefault("Teddybear", 0)){
+                Item = "Teddybear";
+                saveData(editor,dateData.get(0), dateData.get(1), dateData.get(2), dateData.get(3), 7);}
+            else if (view.getId() == added_item_idmap.getOrDefault("Trashcan", 0)){
+                Item = "Trashcan";
+                saveData(editor,dateData.get(0), dateData.get(1), dateData.get(2), dateData.get(3), 8);}
+            else if (view.getId() == R.id.bathroom){
+                Item = "Bathroom";
+                saveData(editor,dateData.get(0), dateData.get(1), dateData.get(2), dateData.get(3), 3);}
+            else if (view.getId() == R.id.window){
+                Item = "Window";
+                saveData(editor,dateData.get(0), dateData.get(1), dateData.get(2), dateData.get(3), 2);}
+
+            /* Save Current Date into SharedPreference */
+            new AlertDialog.Builder(context_for_popup).setTitle("Notice").setMessage(Item+ " Cleaning Alarm is set").setNeutralButton("Close", new DialogInterface.OnClickListener()
+            {public void onClick(DialogInterface dlg, int sumthin) {} }).show();
+        }
+    }
+
+    /*----------------------------Oncreate()--------------------------------------*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -208,6 +267,9 @@ public class GGALGOM_Activity extends AppCompatActivity {
                 iv.setId(new_item_id); // set imageView's id
                 added_item_idmap.put(selected_item, new_item_id); //add id information
 
+                AlarmOnClickListner newitem_alarmlistner = new AlarmOnClickListner();
+                iv.setOnClickListener(newitem_alarmlistner); //새로만든 item에 알람기능 추가
+
                 ((ConstraintLayout) findViewById(R.id.room)).addView(iv);
 
                 // Set ConstraintSet to place in center
@@ -220,31 +282,21 @@ public class GGALGOM_Activity extends AppCompatActivity {
                 constraintSet.connect(iv.getId(), ConstraintSet.BOTTOM, R.id.room, ConstraintSet.BOTTOM,0);
                 constraintSet.applyTo(room_constraintLayout);
 
-                /*
-                iv.setOnLongClickListener(new ImageView.OnLongClickListener(){
-                    @Override
-                    public boolean onLongClick(View view){
-
-                        // 태그 생성
-                        ClipData.Item item = new ClipData.Item( (CharSequence) view.getTag() );
-
-                        String[] mimeTypes = { ClipDescription.MIMETYPE_TEXT_PLAIN };
-                        ClipData data = new ClipData(view.getTag().toString(),   mimeTypes, item);
-                        View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(
-                                view);
-
-                        view.startDrag(data, // data to be dragged
-                                shadowBuilder, // drag shadow
-                                view, // 드래그 드랍할  Vew
-                                0 // 필요없은 플래그
-                        );
-
-                        view.setVisibility(View.INVISIBLE);
-                        return true;
-
-                    }
-                });
-                 */
+//                /* Window onClick listener (id = 3) */
+//                ImageView imageView_bathroom = (ImageView) findViewById(R.id.bathroom) ;
+//                imageView_bathroom.setOnClickListener(new ImageView.OnClickListener()
+//                {
+//                    @Override
+//                    public void onClick(View view){
+//                        /* Save Current Date into SharedPreference */
+//                        List<String> dateData =  getCurrentDate();
+//                        saveData(editor,dateData.get(0), dateData.get(1), dateData.get(2), dateData.get(3), 3);
+//
+//                        /* Save Current Date into SharedPreference */
+//                        new AlertDialog.Builder(context_for_popup).setTitle("Notice").setMessage("Bathroom Cleaning Alarm is set").setNeutralButton("Close", new DialogInterface.OnClickListener()
+//                        {public void onClick(DialogInterface dlg, int sumthin) {} }).show();
+//                    }
+//                });
 
                 return false;
             }
@@ -257,55 +309,32 @@ public class GGALGOM_Activity extends AppCompatActivity {
         sharePref = getSharedPreferences("SHARE_PREF", MODE_PRIVATE);
         editor = sharePref.edit();
 
-        /* Floor onClick listener (id = 1) */
-        ConstraintLayout layout_floor = (ConstraintLayout) findViewById(R.id.floorLayout);
-        layout_floor.setOnClickListener(new ConstraintLayout.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                /* Save Current Date into SharedPreference */
-                List<String> dateData =  getCurrentDate();
-                saveData(editor,dateData.get(0), dateData.get(1), dateData.get(2), dateData.get(3), 1);
+//        /* Floor onClick listener (id = 1) */
+//        ConstraintLayout layout_floor = (ConstraintLayout) findViewById(R.id.floorLayout);
+//        layout_floor.setOnClickListener(new ConstraintLayout.OnClickListener()
+//        {
+//            @Override
+//            public void onClick(View view)
+//            {
+//                /* Save Current Date into SharedPreference */
+//                List<String> dateData =  getCurrentDate();
+//                saveData(editor,dateData.get(0), dateData.get(1), dateData.get(2), dateData.get(3), 1);
+//
+//                /* Show popup to notice alarm is set */
+//                new AlertDialog.Builder(context_for_popup).setTitle("Notice").setMessage("Floor Cleaning Alarm is set").setNeutralButton("Close", new DialogInterface.OnClickListener()
+//                {public void onClick(DialogInterface dlg, int sumthin) {} }).show();
+//            }
+//        });
 
-                /* Show popup to notice alarm is set */
-                new AlertDialog.Builder(context_for_popup).setTitle("Notice").setMessage("Floor Cleaning Alarm is set").setNeutralButton("Close", new DialogInterface.OnClickListener()
-                {public void onClick(DialogInterface dlg, int sumthin) {} }).show();
-            }
-        });
+        /* Window, Bathroom Onclick Listner */
+        AlarmOnClickListner alarmlistner = new AlarmOnClickListner();
 
-        /* Window onClick listener (id = 2) */
         ImageView imageView_window = (ImageView) findViewById(R.id.window) ;
-        imageView_window.setOnClickListener(new ImageView.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                /* Save Current Date into SharedPreference */
-                List<String> dateData =  getCurrentDate();
-                saveData(editor,dateData.get(0), dateData.get(1), dateData.get(2), dateData.get(3), 2);
-
-                /* Save Current Date into SharedPreference */
-                new AlertDialog.Builder(context_for_popup).setTitle("Notice").setMessage("Window Cleaning Alarm is set").setNeutralButton("Close", new DialogInterface.OnClickListener()
-                {public void onClick(DialogInterface dlg, int sumthin) {} }).show();
-            }
-        });
-
-        /* Window onClick listener (id = 3) */
+        imageView_window.setOnClickListener(alarmlistner);
         ImageView imageView_bathroom = (ImageView) findViewById(R.id.bathroom) ;
-        imageView_bathroom.setOnClickListener(new ImageView.OnClickListener()
-        {
-            @Override
-            public void onClick(View view){
-                /* Save Current Date into SharedPreference */
-                List<String> dateData =  getCurrentDate();
-                saveData(editor,dateData.get(0), dateData.get(1), dateData.get(2), dateData.get(3), 3);
+        imageView_bathroom.setOnClickListener(alarmlistner);
 
-                /* Save Current Date into SharedPreference */
-                new AlertDialog.Builder(context_for_popup).setTitle("Notice").setMessage("Bathroom Cleaning Alarm is set").setNeutralButton("Close", new DialogInterface.OnClickListener()
-                {public void onClick(DialogInterface dlg, int sumthin) {} }).show();
-            }
-        });
+
 
         /* Reset button onClick listner */
         Button resetButton = (Button) findViewById(R.id.resetbutton);
@@ -363,6 +392,26 @@ public class GGALGOM_Activity extends AppCompatActivity {
                 dday = 0;
                 break;
             case 3:
+                //dday= 14;
+                dday = 0;
+                break;
+            case 4:
+                //dday= 14;
+                dday = 0;
+                break;
+            case 5:
+                //dday= 14;
+                dday = 0;
+                break;
+            case 6:
+                //dday= 14;
+                dday = 0;
+                break;
+            case 7:
+                //dday= 14;
+                dday = 0;
+                break;
+            case 8:
                 //dday= 14;
                 dday = 0;
                 break;
@@ -451,6 +500,21 @@ public class GGALGOM_Activity extends AppCompatActivity {
             case 3:
                 first = "bathroom";
                 break;
+            case 4:
+                first = "Aircon";
+                break;
+            case 5:
+                first = "Bed";
+                break;
+            case 6:
+                first = "Refrigerator";
+                break;
+            case 7:
+                first = "Teddybear";
+                break;
+            case 8:
+                first = "Trashcan";
+                break;
             default:
                 finish();
                 break;
@@ -499,6 +563,21 @@ public class GGALGOM_Activity extends AppCompatActivity {
             case 3:
                 first = "bathroom";
                 break;
+            case 4:
+                first = "Aircon";
+                break;
+            case 5:
+                first = "Bed";
+                break;
+            case 6:
+                first = "Refrigerator";
+                break;
+            case 7:
+                first = "Teddybear";
+                break;
+            case 8:
+                first = "Trashcan";
+                break;
             default:
                 finish();
                 break;
@@ -535,6 +614,21 @@ public class GGALGOM_Activity extends AppCompatActivity {
                 break;
             case 3:
                 first = "bathroom";
+                break;
+            case 4:
+                first = "Aircon";
+                break;
+            case 5:
+                first = "Bed";
+                break;
+            case 6:
+                first = "Refrigerator";
+                break;
+            case 7:
+                first = "Teddybear";
+                break;
+            case 8:
+                first = "Trashcan";
                 break;
             default:
                 finish();
