@@ -195,6 +195,7 @@ public class GGALGOM_Activity extends AppCompatActivity {
                 // 이미지를 드래그 시작될때
                 case DragEvent.ACTION_DRAG_STARTED:
                     Log.d("DragClickListener", "ACTION_DRAG_STARTED");
+
                     break;
 
                 // 드래그한 이미지를 옮길려는 지역으로 들어왔을때
@@ -237,6 +238,10 @@ public class GGALGOM_Activity extends AppCompatActivity {
                         temp_layout_param.topMargin = (int) (event.getY());
                         view.setLayoutParams(temp_layout_param);
                          */
+
+
+                        view.setX(event.getX()-(view.getWidth()/2));
+                        view.setY(event.getY()-(view.getHeight()/2));
 
                         ConstraintLayout containView = (ConstraintLayout) v;
                         containView.addView(view);
@@ -309,7 +314,7 @@ public class GGALGOM_Activity extends AppCompatActivity {
         /* Alarm System */
         /* Run Dday thread on the background */
         DdayThread thread = new DdayThread();
-        //thread.start();
+        thread.start();
 
         /* Visualize the screen */
         super.onCreate(savedInstanceState);
@@ -337,11 +342,13 @@ public class GGALGOM_Activity extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
             { // 선택되었을 때 콜백메서드
                 String selected_item = null;
+                int imgsize = 200;
 
                 switch(position)
                 {
                     case 0:
                         selected_item = "Aircon";
+                        imgsize = 150;
                         break;
                     case 1:
                         selected_item = "Bed";
@@ -351,9 +358,11 @@ public class GGALGOM_Activity extends AppCompatActivity {
                         break;
                     case 3:
                         selected_item = "Teddybear";
+                        imgsize = 100;
                         break;
                     case 4:
                         selected_item = "Trashcan";
+                        imgsize = 100;
                         break;
                     default:
                         finish();
@@ -367,8 +376,8 @@ public class GGALGOM_Activity extends AppCompatActivity {
                 ImageView iv = new ImageView(getApplicationContext());
 
                 // Set Image View's parameters. Image View will have fixed size and should be placed in the center of LinearLayout(same location with room) by gravity property in above
-                final int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, getResources().getDisplayMetrics());
-                final int height = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, getResources().getDisplayMetrics());
+                final int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, imgsize, getResources().getDisplayMetrics());
+                final int height = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, imgsize, getResources().getDisplayMetrics());
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(width ,height);
 
                 iv.setImageResource(tabmenuimg[position]);  // imageView에 내용 추가
@@ -376,6 +385,8 @@ public class GGALGOM_Activity extends AppCompatActivity {
                 int new_item_id = View.generateViewId();
                 iv.setId(new_item_id); // set imageView's id
                 iv.setTag(selected_item);
+
+
                 added_item_idmap.put(selected_item, new_item_id); //add id information
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     iv.setElevation(10);

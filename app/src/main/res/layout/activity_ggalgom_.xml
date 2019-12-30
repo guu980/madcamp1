@@ -27,6 +27,31 @@
             app:layout_constraintTop_toTopOf="parent"
             >
 
+            <ImageView
+                android:id="@+id/bathroom"
+                android:layout_width="98dp"
+                android:layout_height="103dp"
+                android:src="@drawable/door_tilted"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.9"
+                app:layout_constraintVertical_bias="0.37"
+                />
+
+            <ImageView
+                android:id="@+id/window"
+                android:layout_width="209dp"
+                android:layout_height="107dp"
+                android:src="@drawable/window_tilted"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.17"
+                app:layout_constraintVertical_bias="0.2"/>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/floorLayout"
                 android:layout_width="match_parent"
@@ -35,31 +60,6 @@
                 />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <ImageView
-            android:id="@+id/bathroom"
-            android:layout_width="98dp"
-            android:layout_height="103dp"
-            android:src="@drawable/door_tilted"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.9"
-            app:layout_constraintVertical_bias="0.37"
-            />
-
-        <ImageView
-            android:id="@+id/window"
-            android:layout_width="209dp"
-            android:layout_height="107dp"
-            android:src="@drawable/window_tilted"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.17"
-            app:layout_constraintVertical_bias="0.2"/>
 
         <!-- for debugging -->
         <!--
