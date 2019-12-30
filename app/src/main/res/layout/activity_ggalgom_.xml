@@ -26,6 +26,14 @@
             android:layout_height="312dp"
             app:layout_constraintTop_toTopOf="parent"
             >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/floorLayout"
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageView
@@ -87,14 +95,6 @@
                 android:visibility="invisible" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/floorLayout"
-            android:layout_width="match_parent"
-            android:layout_height="210dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
