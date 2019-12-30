@@ -15,11 +15,14 @@ import android.content.ClipDescription;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.DragEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Gallery;
@@ -137,19 +140,129 @@ public class GGALGOM_Activity extends AppCompatActivity {
         }
     }
 
+    /* -------------------------------------Item Adding System----------------------------------------------*/
+
+    class ImageViewOnClickListener_for_drag implements ImageView.OnLongClickListener
+    {
+        @Override
+        public boolean onLongClick(View view)
+        {
+            // 태그 생성
+            ClipData.Item item = new ClipData.Item( (CharSequence) view.getTag() );
+
+            String[] mimeTypes = { ClipDescription.MIMETYPE_TEXT_PLAIN };
+            ClipData data = new ClipData(view.getTag().toString(), mimeTypes, item);
+            View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(
+                    view);
+
+            view.startDrag(data, // data to be dragged
+                    shadowBuilder, // drag shadow
+                    view, // 드래그 드랍할  Vew
+                    0 // 필요없은 플래그
+            );
+
+            view.setVisibility(View.INVISIBLE);
+            return true;
+        }
+    }
+
+    class DragListener implements View.OnDragListener {
+
+        public boolean onDrag(View v, DragEvent event)
+        {
+            // 이벤트 시작
+            switch (event.getAction()) {
+
+                // 이미지를 드래그 시작될때
+                case DragEvent.ACTION_DRAG_STARTED:
+                    Log.d("DragClickListener", "ACTION_DRAG_STARTED");
+                    break;
+
+                // 드래그한 이미지를 옮길려는 지역으로 들어왔을때
+                case DragEvent.ACTION_DRAG_ENTERED:
+                    Log.d("DragClickListener", "ACTION_DRAG_ENTERED");
+                    // 이미지가 들어왔다는 것을 알려주기 위해 배경이미지 변경
+                    //v.setBackground(targetShape);
+                    break;
+
+                // 드래그한 이미지가 영역을 빠져 나갈때
+                case DragEvent.ACTION_DRAG_EXITED:
+                    Log.d("DragClickListener", "ACTION_DRAG_EXITED");
+                    //v.setBackground(normalShape);
+                    break;
+
+                // 이미지를 드래그해서 드랍시켰을때
+                case DragEvent.ACTION_DROP:
+                    Log.d("DragClickListener", "ACTION_DROP");
+
+                    if(v == findViewById(R.id.room))
+                    {
+                        Log.v("dropped","it's in room!");
+                        View view = (View) event.getLocalState();
+                        ViewGroup viewgroup = (ViewGroup) view.getParent();
+                        viewgroup.removeView(view);
+
+                        ConstraintSet constraintSet = new ConstraintSet();
+                        ConstraintLayout room_constraintLayout = (ConstraintLayout)findViewById(R.id.room);
+                        constraintSet.clone(room_constraintLayout);
+                        Log.v("checking_item","view = " + view.getTag());
+                        constraintSet.clear(view.getId(), ConstraintSet.START);
+                        constraintSet.clear(view.getId(), ConstraintSet.END);
+                        constraintSet.clear(view.getId(), ConstraintSet.TOP);
+                        constraintSet.clear(view.getId(), ConstraintSet.BOTTOM);
+                        constraintSet.applyTo(room_constraintLayout);
+
+                        /*
+                        ConstraintLayout.LayoutParams temp_layout_param = view.layoutParams as ConstraintLayout.LayoutParams?
+                        temp_layout_param.leftMargin = (int) (event.getX());
+                        temp_layout_param.topMargin = (int) (event.getY());
+                        view.setLayoutParams(temp_layout_param);
+                         */
+
+                        ConstraintLayout containView = (ConstraintLayout) v;
+                        containView.addView(view);
+                        view.setVisibility(View.VISIBLE);
+                    }
+                    else
+                    {
+                        Log.v("dropped","it's not in room!");
+                        View view = (View) event.getLocalState();
+                        view.setVisibility(View.VISIBLE);
+                        Context context = getApplicationContext();
+                        Toast.makeText(context,
+                                "이미지를 다른 지역에 드랍할수 없습니다.",
+                                Toast.LENGTH_LONG).show();
+                        break;
+                    }
+                    break;
+
+                case DragEvent.ACTION_DRAG_ENDED:
+                    Log.d("DragClickListener", "ACTION_DRAG_ENDED");
+                    // 여기서 위치값 저장하는 거 만들어주자
+
+                default:
+                    break;
+            }
+            return true;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         /* Alarm System */
         /* Run Dday thread on the background */
         DdayThread thread = new DdayThread();
-        thread.start();
+        //thread.start();
 
         /* Visualize the screen */
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ggalgom_);
 
         /* ------------------------------------ Item Adding System -------------------------------------------- */
+
+        final ImageViewOnClickListener_for_drag drag_longclicklistener = new ImageViewOnClickListener_for_drag();
+        DragListener drag_listener = new DragListener();
 
         final int tabmenuimg[] = {R.drawable.aircon, R.drawable.bed, R.drawable.refrigerator,
                 R.drawable.teddybear, R.drawable.trashcan};
@@ -206,7 +319,11 @@ public class GGALGOM_Activity extends AppCompatActivity {
                 iv.setLayoutParams(layoutParams);  // imageView layout 설정
                 int new_item_id = View.generateViewId();
                 iv.setId(new_item_id); // set imageView's id
+                iv.setTag(selected_item);
                 added_item_idmap.put(selected_item, new_item_id); //add id information
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    iv.setElevation(10);
+                }
 
                 ((ConstraintLayout) findViewById(R.id.room)).addView(iv);
 
@@ -220,37 +337,14 @@ public class GGALGOM_Activity extends AppCompatActivity {
                 constraintSet.connect(iv.getId(), ConstraintSet.BOTTOM, R.id.room, ConstraintSet.BOTTOM,0);
                 constraintSet.applyTo(room_constraintLayout);
 
-                /*
-                iv.setOnLongClickListener(new ImageView.OnLongClickListener(){
-                    @Override
-                    public boolean onLongClick(View view){
-
-                        // 태그 생성
-                        ClipData.Item item = new ClipData.Item( (CharSequence) view.getTag() );
-
-                        String[] mimeTypes = { ClipDescription.MIMETYPE_TEXT_PLAIN };
-                        ClipData data = new ClipData(view.getTag().toString(),   mimeTypes, item);
-                        View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(
-                                view);
-
-                        view.startDrag(data, // data to be dragged
-                                shadowBuilder, // drag shadow
-                                view, // 드래그 드랍할  Vew
-                                0 // 필요없은 플래그
-                        );
-
-                        view.setVisibility(View.INVISIBLE);
-                        return true;
-
-                    }
-                });
-                 */
+                iv.setOnLongClickListener(drag_longclicklistener);
 
                 return false;
             }
 
         });
 
+        findViewById(R.id.room).setOnDragListener(drag_listener);
         /* ------------------------------------ Alarm System -------------------------------------------- */
 
         /* Set SharedPreference */
