@@ -25,6 +25,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Gallery;
@@ -433,6 +434,8 @@ public class GGALGOM_Activity extends AppCompatActivity {
 
         /* Visualize the screen */
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_ggalgom_);
 
         /* ------------------------------------ Item Adding System -------------------------------------------- */
